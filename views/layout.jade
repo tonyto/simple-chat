@@ -1,0 +1,30 @@
+!!!
+html
+	head
+		title= title
+		
+		link(rel='stylesheet', href='/stylesheets/style.css')
+		script(src='http://code.jquery.com/jquery-1.6.1.min.js')
+		script(src='/socket.io/socket.io.js')
+		
+		script
+			var socket = io.connect('http://localhost');
+			
+			function message (from, msg){
+				$('#lines').append($('<p>').append($('<b>').text(from), msg));
+			}
+			
+			function clear () {
+				$('#message').val('').focus();
+			}
+			
+			$(function (){
+				$('#send-message').submit(function () {
+					message('me: ', $('#message').val());
+					socket.emit('message', $('#message').val());
+					clear();
+					return false;
+				});
+			});
+			
+		body!= body
