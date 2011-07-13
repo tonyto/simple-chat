@@ -8,6 +8,10 @@ var express = require('express');
 var app = module.exports = express.createServer();
 var io = require('socket.io').listen(app);
 
+
+var users = {}
+var new_user = null
+
 // Configuration
 
 app.configure(function(){
@@ -30,9 +34,21 @@ app.configure('production', function(){
 // Routes
 
 app.get('/', function(req, res){
-  res.render('index', {
+  res.render('join', {
     title: 'Express'
   });
+});
+
+app.post('/join', function(req, res){
+	console.log('NAME: ' + req.body.username);
+	new_user = req.body.username;
+	res.redirect('/chat');
+});
+
+app.get('/chat', function(req, res){
+	res.render('index', {
+		title: 'Chatting you up...'
+	});
 });
 
 app.listen(3000, function(){

@@ -18,6 +18,13 @@ html
 				$('#message').val('').focus();
 			}
 			
+			$(function(){
+				$('#join-chat').submit(function(){
+					socket.emit('new user', $('#username').val());
+					
+				})
+			})
+			
 			$(function (){
 				$('#send-message').submit(function () {
 					message('me: ', $('#message').val());
