@@ -42,10 +42,14 @@ app.get('/', function(req, res){
 app.post('/join', function(req, res){
 	console.log('NAME: ' + req.body.username);
 	new_user = req.body.username;
+
 	res.redirect('/chat');
 });
 
 app.get('/chat', function(req, res){
+	var socket = io.connect('http://localhost');
+	socket.emit('new user', new_user)
+
 	res.render('index', {
 		title: 'Chatting you up...'
 	});
@@ -59,8 +63,13 @@ app.listen(3000, function(){
 // Socket.io server
 
 io.sockets.on('connection', function (socket) {
-  socket.on('message', function (msg) {
+	socket.on('message', function (msg) {
 		socket.broadcast.emit('message', msg);
-    console.log(msg);
-  });
+		console.log('message sent: ' + msg);
+	});
+
+	socket.on('new user', function (username) {
+		socket.broadcast.emit('new user', username);
+		console.log('broadcasting new user: ' + username);
+	})
 });
